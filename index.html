@@ -8,7 +8,7 @@
 <body>
 	<div class="header">
 		<div class="headerContent">
-			<h1>Loan Prepayment Calculator</h1>
+			<h2>Loan Prepayment Calculator</h2>
 		</div>
 	</div>
 	<div class="container">
@@ -16,14 +16,16 @@
 		
 		<form>
 			<br>
-			<div><label>Balance<input type="number" name="initBalance" id="initBalance"></label><div>
-			<div><label>Interest Rate<input type="number" name="rate" id="rate"></label><div>
-			<div><label>Loan Term Remaining in Months<input type="number" name="term" id="term"></label><div>
-			<div><label>Monthly Additional Payment<input type="number" name="prepay" id="prepay"></label><div>
+			<div>Current Balance Outstanding<input type="number" name="initBalance" id="initBalance"></div>
+			<div>Interest Rate<input type="number" name="rate" id="rate"></div>
+			<div>Loan Term Remaining in Months<input type="number" name="term" id="term"></div>
+			<div>Additional Monthly Payment<input type="number" name="prepay" id="prepay"></div>
 			<br>
 		</form>
 		
 		<button type="button" onclick="Calculate()">Calculate</button><br>
+		
+		<p id = "savings"></p>
 		
 		<p class="output" id = "month"><span class="colHeader"></span></p>
 		<p class="output" id = "balOut"><span class="colHeader"></span></p>

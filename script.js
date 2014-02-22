@@ -1,41 +1,52 @@
 function Calculate() {
 
 	var input = readInputs();
-	var payments = objectConstructor(inputs);
+	var payments = objectConstructor(input);
 	
 	// Calculate array of cashflows
 	for (i = 1; i < inputs.term; i++) {
+	
 		payments.aggressive.interest[i] = payments.aggressive.balance[i - 1] * inputs.monthlyInterest;
 		payments.aggressive.schedPrincipal[i] = inputs.monthlyPayment - payments.aggressive.interest[i];
 		payments.aggressive.unschedPrincipal[i] = payments.aggressive.unschedPrincipal[i - 1];
 		payments.aggressive.cashflow[i] = payments.aggressive.interest[i] + payments.aggressive.schedPrincipal[i] + payments.aggressive.unschedPrincipal[i];
 		payments.aggressive.balance[i] = payments.aggressive.balance[i - 1] - (payments.aggressive.schedPrincipal[i - 1] + payments.aggressive.unschedPrincipal[i - 1]);
 		payments.aggressive.month[i] = i + 1;
-	}		
-	outputToScreen(payments.aggressive);	
+		
+		payments.base.interest[i] = payments.base.balance[i - 1] * inputs.monthlyInterest;
+		payments.base.schedPrincipal[i] = inputs.monthlyPayment - payments.base.interest[i];
+		payments.base.unschedPrincipal[i] = payments.base.unschedPrincipal[i - 1];
+		payments.base.cashflow[i] = payments.base.interest[i] + payments.base.schedPrincipal[i] + payments.base.unschedPrincipal[i];
+		payments.base.balance[i] = payments.base.balance[i - 1] - (payments.base.schedPrincipal[i - 1] + payments.base.unschedPrincipal[i - 1]);
+		payments.base.month[i] = i + 1;
+	}
+	
+	var basePay = arraySum(payments.base.cashflow);
+	var aggressivePay = arraySum(payments.aggressive.cashflow);
+	var savings = basePay - aggressivePay;
+	outputToScreen(payments.aggressive);
 }
 
 
-function outputToScreen(output) {
+function outputToScreen(cf) {
 	
-	monthArray = "<strong>Month</strong>";
-	balArray = "<strong>Balance</strong>";
-	intArray = "<strong>Interest</strong>";
-	prinArray = "<strong>Principal</strong>";
-	prepayArray = "<strong>Prepayments</strong>";
-	cfArray = "<strong>Total Payments</strong>";
+	monthArray = "<strong>MONTH</strong>";
+	balArray = "<strong>BALANCE</strong>";
+	intArray = "<strong>INTEREST</strong>";
+	prinArray = "<strong>PRINCIPAL</strong>";
+	prepayArray = "<strong>PREPAYMENT</strong>";
+	cfArray = "<strong>TOTAL PAYMENT</strong>";
 	
 	i = 0;
-	while(output.balance[i] > 0) {
-		monthArray = monthArray + "<br>" + output.month[i];
-		balArray = balArray + "<br>" + "$" + output.balance[i].toFixed(2);
-		intArray = intArray + "<br>" + "$" + output.interest[i].toFixed(2);
-		prinArray = prinArray + "<br>" + "$" + output.schedPrincipal[i].toFixed(2);
-		prepayArray = prepayArray + "<br>" + "$" + output.unschedPrincipal[i].toFixed(2);
-		cfArray = cfArray + "<br>" + "$" + output.cashflow[i].toFixed(2);
+	while(cf.balance[i] > 0) {
+		monthArray = monthArray + "<br>" + cf.month[i];
+		balArray = balArray + "<br>" + "$" + cf.balance[i].toFixed(2);
+		intArray = intArray + "<br>" + "$" + cf.interest[i].toFixed(2);
+		prinArray = prinArray + "<br>" + "$" + cf.schedPrincipal[i].toFixed(2);
+		prepayArray = prepayArray + "<br>" + "$" + cf.unschedPrincipal[i].toFixed(2);
+		cfArray = cfArray + "<br>" + "$" + cf.cashflow[i].toFixed(2);
 		i += 1;
 	}
-	
 	document.getElementById("month").innerHTML = monthArray;
 	document.getElementById("balOut").innerHTML = balArray;
 	document.getElementById("intOut").innerHTML = intArray;
@@ -99,4 +110,12 @@ function readInputs() {
 		monthlyPayment: monthlyPayment
 	}
 	return(inputs);
+}
+
+function arraySum(array) {
+	var sum = 0;
+	for(i = 0; i < array.length; i++) {
+		sum += array[i];
+	}
+	return sum;
 }
